@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="../../static/css/style.css">
+</head>
+<body>
+<!--Header-->
+<header class="header">
+    <div class="container">
+        <div class="header__inner">
+            <div class="header_logo">
+                <a href="#"><img id="logo" src="../../static/img/logoRates.png" alt=""></a>
+            </div>
+            <nav class="nav">
+                {% for i in bank %}
+                     <a class="nav_link" href="branches">{{ i.bank_name}}</a>
+                {% endfor %}
+            </nav>
+        </div>
+    </div>
+</header> <!--/Header-->
+
+<!--Intro-->
+<div class="intro">
+    <div class="intro_inner">
+        <div class="container">
+            <table border="1">
+                <tbody>
+                <tr>
+                    <th>bank name</th>
+                    <th>usd buy</th>
+                    <th>usd sell</th>
+                    <th>eur buy</th>
+                    <th>eur sell</th>
+                    <th>rub buy</th>
+                    <th>rub sell</th>
+                </tr>
+                {% for i in bank %}
+
+                    <tr>
+                        <td>{{ i.bank_name }}</td>
+                        <td>{{ i.usd_buy }}</td>
+                        <td>{{ i.usd_sell }}</td>
+                        <td>{{ i.eur_buy }}</td>
+                        <td>{{ i.eur_sell }}</td>
+                        <td>{{ i.rub_buy }}</td>
+                        <td>{{ i.rub_sell }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div> <!--/Intro-->
+
+
+</body>
+</html>
