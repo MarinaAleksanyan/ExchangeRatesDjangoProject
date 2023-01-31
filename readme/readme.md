@@ -310,7 +310,7 @@ def index(request):
 
 ## Run Server
 
-![Screenshot (1)](https://user-images.githubusercontent.com/111388676/214602842-7728b58b-3f48-4327-a69e-8ca96690a03a.png)
+<img src="img/rate_am.png">
 
 * Header div contains bank names with a link to the respective bank's website.
 * Below is the intro div, in which a table created with a for loop.
@@ -318,5 +318,120 @@ def index(request):
 ---
 
 ### (part 2)
-* Exchange rates will be imported from the banks' websites and will be modified according the information provided the bank.
-* By clicking on the names of the banks, new pages will be opened, where displayed information about the branches of the given bank.
+
+* Exchange rates will be imported from the banks' websites and will be modified according the information provided the
+  bank.
+* By clicking on the names of the banks, new pages will be opened, where displayed information about the branches of the
+  given bank.
+
+---
+
+# Branches Page
+
+## Problem Description
+
+***By clicking on the name of the bank, a new page should be opened, which will show information about the branches of
+the given bank.***
+
+---
+
+## Controller
+
+* First, we add the variable **branch** to our function, to which we will give the value BankBranches.objects.all()
+* then, we give **branch** variable to 'branch' key in context dictionary.
+
+```python
+def index(request):
+    bank = Bank.objects.all()
+    branch = BankBranches.objects.all()
+
+    context = {
+        'bank': bank,
+        'branch': branch,
+        'title': 'Rates.am',
+    }
+
+    return render(request, template_name="ratesPages/index.html", context=context)
+```
+
+* then, we add **href="{% url 'branches' i.pk %}"** to the bank names in index.html, which will create a path to the
+  branches page according to the bank's pk.
+
+```html
+{% for i in bank %}
+    <a class="nav_link" href="{% url 'branches' i.pk %}">{{ i.bank_name}}</a>
+{% endfor %}
+```
+
+* In urls.py of the rates module, we add a new path(), which will create a path according to pk.
+
+```
+path('bank/<int:bank_id>/', branches, name='branches'),
+```
+
+---
+
+## Branches template
+
+* This page has the structure of index.html
+* We write the same href in the header div
+
+```html
+{% for i in banks %}
+    <a class="nav_link" href="{% url 'branches' i.pk %}">{{ i.bank_name }}</a>
+{% endfor %}
+```
+* so that we can open information about other banks from this page. 
+
+---
+
+### Controller
+* Let's add a new function:
+```python
+def branches(request, bank_id):
+    branch = BankBranches.objects.filter(bank_id=bank_id)
+    banks = Bank.objects.all()
+    bank = Bank.objects.get(pk=bank_id)
+    context = {
+        'branch': branch,
+        'bank': bank,
+        'banks': banks,
+        'title': 'Rates.am',
+    }
+    return render(request, template_name="ratesPages/branches.html", context=context)
+```
+* The branch variable receives a value that filters all objects of the Branch class and receives the objects with the corresponding id.
+* The bank variable gets the object of the Bank class with given id.
+
+---
+
+## branches.html
+
+* We create a table in the intro div.
+* We get the information about the branches in the table with a for loop.
+```html
+<table border="1">
+                <tbody>
+                <th>branch number</th>
+                <th>city</th>
+                <th>address</th>
+                <th>phone</th>
+
+                {% for i in branch %}
+                    <tr>
+                        <td>{{ i.branch_number }}</td>
+                        <td>{{ i.city }}</td>
+                        <td>{{ i.address }}</td>
+                        <td>{{ i.phone }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+```
+
+---
+
+###Run server
+
+<img src="img/branchesAcba.png">
